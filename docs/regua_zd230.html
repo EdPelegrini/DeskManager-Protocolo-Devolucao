@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>Régua de calibração ZD230 (80x40 mm)</title>
+<style>
+  @page { size: 80mm 40mm; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; font-family: Arial, Helvetica, sans-serif; color: #000; }
+  .aviso { padding: 10px; background: #fff3cd; font-size: 14px; }
+  .aviso button { padding: 6px 16px; font-size: 14px; }
+  .pag { position: relative; width: 80mm; height: 40mm; overflow: hidden; }
+  /* moldura exata de 80x40 mm */
+  .moldura { position: absolute; left: 0; top: 0; width: 80mm; height: 40mm; border: 0.4mm solid #000; }
+  /* tracos da regua horizontal: um a cada 5 mm, longo a cada 10 mm */
+  .h { position: absolute; top: 0; width: 0.25mm; background: #000; height: 3mm; }
+  .h.l { height: 6mm; }
+  .hn { position: absolute; top: 6.4mm; font-size: 7pt; transform: translateX(-50%); font-weight: 700; }
+  /* regua vertical */
+  .v { position: absolute; left: 0; height: 0.25mm; background: #000; width: 3mm; }
+  .v.l { width: 6mm; }
+  .vn { position: absolute; left: 6.6mm; font-size: 7pt; transform: translateY(-50%); font-weight: 700; }
+  .txt { position: absolute; left: 12mm; top: 15mm; font-size: 8.5pt; line-height: 1.2; }
+  .quadrado { position: absolute; left: 12mm; top: 26mm; width: 20mm; height: 10mm; border: 0.3mm solid #000; font-size: 6pt; text-align: center; padding-top: 3mm; }
+  .fim { position: absolute; right: 2mm; bottom: 1mm; font-size: 7pt; font-weight: 700; }
+  @media print { .aviso { display: none; } }
+</style>
+</head>
+<body>
+<div class="aviso">
+  Régua de calibração. Abra no Chrome, clique em Imprimir, escolha a sua ZD230,
+  <b>Escala 100%</b>, <b>Margens: Nenhuma</b>, e imprima. &nbsp;<button onclick="window.print()">Imprimir régua</button>
+</div>
+<div class="pag" id="pag">
+  <div class="moldura"></div>
+  <div class="txt">TEXTO 8,5 PT<br>CHAMADO: 0001-000123<br>QUADRADO ABAIXO = 20 x 10 MM</div>
+  <div class="quadrado">20 x 10 mm</div>
+  <div class="fim">80 mm &rarr;</div>
+</div>
+<script>
+  var p = document.getElementById('pag'), i, e;
+  for (i = 0; i <= 80; i += 5) {
+    e = document.createElement('div'); e.className = 'h' + (i % 10 === 0 ? ' l' : ''); e.style.left = i + 'mm'; p.appendChild(e);
+    if (i % 10 === 0) { e = document.createElement('div'); e.className = 'hn'; e.style.left = Math.min(Math.max(i, 3), 77) + 'mm'; e.textContent = i; p.appendChild(e); }
+  }
+  for (i = 0; i <= 40; i += 5) {
+    e = document.createElement('div'); e.className = 'v' + (i % 10 === 0 ? ' l' : ''); e.style.top = i + 'mm'; p.appendChild(e);
+    if (i % 10 === 0 && i > 0) { e = document.createElement('div'); e.className = 'vn'; e.style.top = i + 'mm'; e.textContent = i; p.appendChild(e); }
+  }
+</script>
+</body>
+</html>

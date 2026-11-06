@@ -1,0 +1,13 @@
+# Segredos e credenciais: nunca versionar
+.env
+.env.*
+!.env.example
+token*.txt
+*.token
+corpo.json
+a.json
+
+# Dependências e temporários
+node_modules/
+*.log
+~$*

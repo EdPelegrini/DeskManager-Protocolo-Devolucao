@@ -1,0 +1,45 @@
+{
+  "name": "Protocolo de Devolucao - Etiqueta",
+  "key": "12345",
+  "prefixo": "meuprefixo",
+  "constants": [],
+  "cron": ["CRON_access_token"],
+
+  "_observacoes": {
+    "papel": "Gera o protocolo de devolucao (5 etiquetas 80x40 mm) a partir de um chamado. Acionado por Acao Rapida no chamado. Devolve um modal com iframe e botao Imprimir.",
+    "blocos": [
+      "BEGIN_init - declara codmodal, cod_chamado, codchamado, chamado_cod, chave_chamado, chamado (o campo com o numero do chamado depende da Acao Rapida)",
+      "PARSE_Etiqueta (Python) - resolve a chave pelo codigo, le campos extras e a acao DEVOLUCAO DE PRODUTO mais recente, monta as etiquetas e devolve {modal:{iframe:{url}}}"
+    ],
+    "como_publicar": "node tools/montar_fluxo.js token.txt (dry run) | --criar | --publicar <chave>",
+    "como_testar": "POST na Invoke URL do Maestro com {\"codmodal\":\"0001-000123\"}; abrir a url do HTML devolvido",
+    "gotchas": [
+      "Acoes do chamado: POST ChamadoHistoricos/lista com Solicitante 'N'. O caminho ChamadosSuporte/interacao nao existe.",
+      "Campos extras: POST ChamadosSuporte/camposextras com {Chave}; vem em TCamposExtras[].nomecampoextra / valcampoextra.",
+      "Grupo do operador: POST Operadores {Chave}; campo GrupoPrincipal.",
+      "Setor e camara fria vem de texto livre da acao: '( ) Nome' / '(x) Nome'. Sim/Nao = camara fria; o resto = setor.",
+      "JFiltros.Grupos da Acao Rapida filtra pelo GRUPO DO CHAMADO (fila atual), nao pelo operador.",
+      "Nao forcar @page com altura diferente da do driver: a impressora segura o trabalho na fila.",
+      "Driver 300 dpi imprime ~1,4x maior; usar ZD230-203dpi."
+    ],
+
+    "recursos_criados": [
+      "Acao Rapida 000002 'Imprimir protocolo de devolucao' (Tipo 1, Icon print, Checkbox All); Grupos 000101, 000102, 000103"
+    ],
+
+    "historico": {
+      "2026-03-15": {
+        "pedido": "Automatizar o protocolo de devolucao impresso (o carrinho so tinha o numero do chamado). Exemplo: 0001-000123",
+        "causa_raiz": "As informacoes ficavam so no chamado, nao no carrinho.",
+        "mudou": [
+          "Maestro criado e publicado",
+          "Layout em 5 etiquetas 80x40 mm, em ordem inversa de impressao, com espaco para a fita no topo",
+          "Quantidade e produto lidos do texto da acao de devolucao"
+        ],
+        "validacao": "Gerado com um chamado de teste e impresso na ZD230 (driver 203 dpi).",
+        "nao_validado": "Primeiro clique por operadores de grupos novos.",
+        "por": "agente"
+      }
+    }
+  }
+}
